@@ -22,7 +22,10 @@ export default class LinkedList {
     }
     return stringArr.join(',')
   }
-  append(element: any): void {
+  getHead(): any {
+    return this.head
+  }
+  append(element: any): boolean {
     const newNode: Node = {
       element,
       next: null
@@ -37,10 +40,12 @@ export default class LinkedList {
       currentNode.next = newNode
     }
     this.length++
+
+    return true
   }
-  insert(index: number, element: any): void {
+  insert(index: number, element: any): boolean {
     if (index > this.length || index < 0) {
-      return
+      return false
     }
     const newNode: Node = {
       element,
@@ -63,5 +68,71 @@ export default class LinkedList {
       }
     }
     this.length++
+
+    return true
+  }
+  remove(element: any): any {
+    if (this.isEmpty()) {
+      return null
+    }
+
+    let currentNode = this.head
+    let prevNode = null
+
+    while (currentNode) {
+      if (currentNode.element === element) {
+        if (prevNode) {
+          prevNode.next = currentNode.next
+        } else {
+          this.head = currentNode.next
+        }
+        this.length--
+
+        return currentNode.element
+      }
+      prevNode = currentNode
+      currentNode = currentNode.next
+    }
+
+    return null
+  }
+  removeAt(index: number): any {
+    if (index > this.length || index < 0 || this.isEmpty()) {
+      return null
+    }
+    let currentIndex = 0
+    let currentNode = this.head as Node
+    let prevNode = null
+
+    while (currentIndex !== index && currentNode) {
+      currentIndex++
+      prevNode = currentNode
+      currentNode = currentNode.next as Node
+    }
+
+    if (prevNode) {
+      prevNode.next = currentNode.next
+    } else {
+      this.head = currentNode.next
+    }
+
+    this.length--
+    return currentNode && currentNode.element
+  }
+  indexOf(element: any): number {
+    let index = -1
+    let currentIndex = 0
+    let currentNode = this.head
+
+    while (currentNode) {
+      if (currentNode.element === element) {
+        index = currentIndex
+        break
+      }
+      currentIndex++
+      currentNode = currentNode.next
+    }
+
+    return index
   }
 }
