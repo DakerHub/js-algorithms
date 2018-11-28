@@ -82,6 +82,58 @@ export default class BinarySearchTree {
       }
     }
   }
+  remove(key: any): void {
+    let currentNode = this.root
+    let prevNode = null
+
+    while (currentNode) {
+      if (currentNode.key === key) {
+        let node: Node | null = this.removeNode(currentNode)
+        if (prevNode) {
+          if (prevNode.key > key) {
+            prevNode.left = node
+          } else {
+            prevNode.right = node
+          }
+        } else if (this.root) {
+          this.root.key = node.key
+          node = null
+        }
+
+        break
+      } else if (currentNode.key > key) {
+        prevNode = currentNode
+        currentNode = currentNode.left
+      } else {
+        prevNode = currentNode
+        currentNode = currentNode.right
+      }
+    }
+  }
+  removeNode(node: Node): Node {
+    if (!node.left && !node.right) {
+      return node
+    } else if (node.left && node.right) {
+      let currentNode = node.right
+      let prevNode = node
+
+      while (currentNode) {
+        if (currentNode.left) {
+          prevNode = currentNode
+          currentNode = currentNode.left
+        } else {
+          node.key = currentNode.key
+          prevNode.left = null
+          break
+        }
+      }
+      return node
+    } else if (node.left) {
+      return node.left
+    } else {
+      return node.right as Node
+    }
+  }
   private inOrderTraverseNode(callback: Function, node: Node | null): void {
     if (!node) return
 

@@ -107,4 +107,48 @@ describe('测试 二叉搜索树', () => {
       expect(tree.max()).toBe(10)
     })
   })
+
+  describe('测试 remove', () => {
+    let tree = new BinarySearchTree()
+    it('依次插入6、5、1、7、8、10、2', () => {
+      tree.insert(6)
+      tree.insert(5)
+      tree.insert(1)
+      tree.insert(7)
+      tree.insert(8)
+      tree.insert(10)
+      tree.insert(2)
+      const root = tree.root
+      expect(root.key).toBe(6)
+      expect(root.left.key).toBe(5)
+      expect(root.right.key).toBe(7)
+    })
+    it('移除5,6的左节点应该是1', () => {
+      tree.remove(5)
+      const root = tree.root
+      expect(root.left.key).toBe(1)
+    })
+    it('移除6,root应该是7', () => {
+      tree.remove(6)
+      const root = tree.root
+      expect(root.key).toBe(7)
+    })
+    it('移除7,root右节点应该是10', () => {
+      tree.remove(7)
+      const root = tree.root
+      expect(root.key).toBe(8)
+      expect(root.right.key).toBe(10)
+    })
+    it('全部移除,root应该是null', () => {
+      tree.remove(1)
+      tree.remove(2)
+      tree.remove(5)
+      tree.remove(6)
+      tree.remove(7)
+      tree.remove(8)
+      tree.remove(10)
+      const root = tree.root
+      expect(root).toBeNull()
+    })
+  })
 })
