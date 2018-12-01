@@ -123,12 +123,12 @@ describe('测试 二叉搜索树', () => {
       expect(root.left.key).toBe(5)
       expect(root.right.key).toBe(7)
     })
-    it('移除5,6的左节点应该是1', () => {
+    it('移除5, 6的左节点应该是1', () => {
       tree.remove(5)
       const root = tree.root
       expect(root.left.key).toBe(1)
     })
-    it('移除6,root应该是7', () => {
+    it('移除6, root应该是7', () => {
       tree.remove(6)
       const root = tree.root
       expect(root.key).toBe(7)

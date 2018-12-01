@@ -83,56 +83,56 @@ export default class BinarySearchTree {
     }
   }
   remove(key: any): void {
-    let currentNode = this.root
-    let prevNode = null
+    this.root = this.removeNode(this.root, key)
+  }
+  /**
+   * 移除node子节点中的某个节点，并且返回根节点
+   * @param node
+   * @param key
+   */
+  removeNode(node: Node | null, key: any): Node | null {
+    if (node === null) {
+      return null
+    }
 
-    while (currentNode) {
-      if (currentNode.key === key) {
-        let node: Node | null = this.removeNode(currentNode)
-        if (prevNode) {
-          if (prevNode.key > key) {
-            prevNode.left = node
-          } else {
-            prevNode.right = node
-          }
-        } else if (this.root) {
-          this.root.key = node.key
-          node = null
-        }
-
-        break
-      } else if (currentNode.key > key) {
-        prevNode = currentNode
-        currentNode = currentNode.left
-      } else {
-        prevNode = currentNode
-        currentNode = currentNode.right
+    if (node.key < key) {
+      node.right = this.removeNode(node.right, key)
+      return node
+    } else if (node.key > key) {
+      node.left = this.removeNode(node.left, key)
+      return node
+    } else {
+      // 找到目标节点
+      if (!node.left && !node.right) {
+        node = null
+        return node
       }
+
+      if (!node.left) {
+        node = node.right
+        return node
+      }
+
+      if (!node.right) {
+        node = node.left
+        return node
+      }
+
+      // 存在两个子节点，在右子孙中找到最小节点的替换掉顶节点，并且移除掉最小的那个节点
+      const minKeyNode = this.getMinNode(node.right)
+      node.key = minKeyNode.key
+      node.right = this.removeNode(node.right, minKeyNode.key)
+      return node
     }
   }
-  removeNode(node: Node): Node {
-    if (!node.left && !node.right) {
-      return node
-    } else if (node.left && node.right) {
-      let currentNode = node.right
-      let prevNode = node
-
-      while (currentNode) {
-        if (currentNode.left) {
-          prevNode = currentNode
-          currentNode = currentNode.left
-        } else {
-          node.key = currentNode.key
-          prevNode.left = null
-          break
-        }
-      }
-      return node
-    } else if (node.left) {
-      return node.left
-    } else {
-      return node.right as Node
+  private getMinNode(node: Node): Node {
+    let minKeyNode: Node = node
+    let currentNode: Node | null = node
+    while (currentNode) {
+      minKeyNode = currentNode
+      currentNode = currentNode.left
     }
+    return minKeyNode
   }
   private inOrderTraverseNode(callback: Function, node: Node | null): void {
     if (!node) return
