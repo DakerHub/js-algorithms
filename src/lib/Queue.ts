@@ -18,4 +18,7 @@ export default class Queue<T> {
   front(): T | undefined {
     return this.isEmpty() ? undefined : this.items[0]
   }
+  toString(): string {
+    return this.items.join(',')
+  }
 }
